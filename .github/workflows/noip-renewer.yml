@@ -399,6 +399,3 @@ jobs:
             simaofsilva/noip-renewer:latest
         fi
         
-        username30="${{ secrets.NO_IP_USERNAME_30 }}"
-        password30="${{ secrets.NO_IP_PASSWORD_30 }}"
-        totp_key30="${{ secrets.NO_IP_TOTP_KEY_30 }}"
