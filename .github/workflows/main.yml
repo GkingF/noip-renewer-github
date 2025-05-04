@@ -1,0 +1,36 @@
+name: noip-renewer
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  noip-renewer:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    - name: Docker Pull
+      run: docker pull simaofsilva/noip-renewer:latest
+
+    - name: Process NO-IP accounts
+      run: |
+
+        username1="${{ secrets.NO_IP_USERNAME_1 }}"
+        password1="${{ secrets.NO_IP_PASSWORD_1 }}"
+        totp_key1="${{ secrets.NO_IP_TOTP_KEY_1 }}"
+        
+        if [ -n "$username1" ] && [ -n "$password1" ] && [ -n "$totp_key1" ]; then
+          echo "Processing account 1: $username1"
+          docker run --rm \
+            --env NO_IP_USERNAME="$username1" \
+            --env NO_IP_PASSWORD="$password1" \
+            --env NO_IP_TOTP_KEY="$totp_key1" \
+            simaofsilva/noip-renewer:latest
+        fi
